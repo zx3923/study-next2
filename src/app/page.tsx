@@ -12,14 +12,19 @@ export default function Home() {
       <div>
         <form action={action} className="flex flex-col gap-2">
           <input type="email" name="email" />
+          {state?.fieldErrors.email?.map((error, i) => (
+            <span key={i}>{error}</span>
+          ))}
           <input type="text" name="username" />
+          {state?.fieldErrors.username?.map((error, i) => (
+            <span key={i}>{error}</span>
+          ))}
           <input type="password" name="password" />
-          {state?.status ? (
-            <span>{state.message}</span>
-          ) : (
-            <span>{state?.message}</span>
-          )}
+          {state?.fieldErrors.password?.map((error, i) => (
+            <span key={i}>{error}</span>
+          ))}
           <Btn text="login" />
+          {state === undefined ? <span>성공</span> : null}
         </form>
       </div>
     </main>
