@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { handleForm } from "./actions";
-import Btn from "./components/btn";
+import { handleForm } from "../actions";
+import Btn from "../components/btn";
 
 export default function Home() {
   const [state, action] = useFormState(handleForm, null);
