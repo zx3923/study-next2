@@ -3,7 +3,7 @@
 import Btn from "@/app/components/btn";
 import { useFormState } from "react-dom";
 import { createAccount } from "./actions";
-import { error } from "console";
+import Link from "next/link";
 
 function CreateAccount() {
   const [state, action] = useFormState(createAccount, null);
@@ -35,6 +35,7 @@ function CreateAccount() {
           <Btn text="sign up" />
           {state === undefined ? <span>성공</span> : null}
         </form>
+        <Link href="/log-in">로그인</Link>
       </div>
     </div>
   );
