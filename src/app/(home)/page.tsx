@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import db from "../lib/db";
 import PagingTweet from "../components/paging-tweet";
 import { Prisma } from "@prisma/client";
+import AddTweet from "../components/add-tweet";
 
 async function getTweets() {
   const tweets = await db.tweet.findMany({
@@ -32,6 +33,7 @@ export default async function Home() {
   };
   return (
     <main className="flex min-h-screen flex-col items-center  p-24">
+      <AddTweet />
       <div className="flex gap-5">
         <Link href="/profile">프로필</Link>
         <form action={logOut}>
@@ -42,7 +44,9 @@ export default async function Home() {
         {/* {tweets.map((tweet) => (
           <ListTweet key={tweet.id} {...tweet} />
         ))} */}
-        <PagingTweet initialTweets={initialTweets} />
+        {initialTweets.length === 0 ? null : (
+          <PagingTweet initialTweets={initialTweets} />
+        )}
       </div>
     </main>
   );
