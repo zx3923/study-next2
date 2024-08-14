@@ -27,7 +27,6 @@ async function TweetDetail({ params }: { params: { id: string } }) {
   if (!tweet) {
     return notFound();
   }
-  console.log(tweet);
   return (
     <div>
       {tweet?.id}. {tweet?.tweet}
