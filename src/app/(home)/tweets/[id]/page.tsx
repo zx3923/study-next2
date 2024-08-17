@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { unstable_cache as nextCache, revalidateTag } from "next/cache";
 import LikeButton from "@/app/components/like-btn";
 import { Prisma } from "@prisma/client";
-import CommentInput from "@/app/components/commente-input";
+import CommentInput from "@/app/components/comment-input";
 
 async function getTweet(id: number) {
   const tweet = await db.tweet.findUnique({
