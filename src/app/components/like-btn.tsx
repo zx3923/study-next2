@@ -6,13 +6,13 @@ import { dislikePost, likePost } from "../(home)/tweets/[id]/actions";
 interface LikeButtonProps {
   isLiked: boolean;
   likeCount: number;
-  tweeId: number;
+  tweetId: number;
 }
 
 export default function LikeButton({
   isLiked,
   likeCount,
-  tweeId,
+  tweetId,
 }: LikeButtonProps) {
   const [state, reducerFn] = useOptimistic(
     { isLiked, likeCount },
@@ -26,9 +26,9 @@ export default function LikeButton({
   const onClick = async () => {
     reducerFn(undefined);
     if (isLiked) {
-      await dislikePost(tweeId);
+      await dislikePost(tweetId);
     } else {
-      await likePost(tweeId);
+      await likePost(tweetId);
     }
   };
   return (

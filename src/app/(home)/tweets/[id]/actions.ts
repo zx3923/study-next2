@@ -2,7 +2,7 @@
 
 import db from "@/app/lib/db";
 import getSession from "@/app/lib/session";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
 export async function likePost(tweetId: number) {
@@ -34,27 +34,27 @@ export async function dislikePost(tweetId: number) {
 }
 
 const formSchema = z.object({
-  comment: z.string().max(100, "100글자 이하"),
-  tweeId: z.number(),
+  comment: z.string().min(1, "1글자 이상").max(100, "100글자 이하"),
+  tweetId: z.number(),
 });
 
 export async function createComment(_: any, formData: FormData) {
   const session = await getSession();
   const data = {
     comment: formData.get("comment"),
-    tweeId: Number(formData.get("tweeId")),
+    tweetId: Number(formData.get("tweetId")),
   };
   const result = await formSchema.spa(data);
-  console.log(result);
   if (!result.success) {
     return result.error.flatten();
   } else {
     const comment = await db.comment.create({
       data: {
         body: result.data.comment,
-        tweetId: result.data.tweeId,
+        tweetId: result.data.tweetId,
         userId: session.id!,
       },
     });
+    revalidatePath(`/tweets/${result.data.tweetId}`);
   }
 }
