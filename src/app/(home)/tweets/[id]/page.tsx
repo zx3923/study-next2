@@ -48,16 +48,20 @@ async function getComment(id: number) {
   return comment;
 }
 
-async function getCachedLikeStatus(tweeId: number) {
+async function getCachedLikeStatus(tweetId: number) {
   const session = await getSession();
   const userId = session.id;
   const cachedOperation = nextCache(getLikeStatus, ["like-status"], {
-    tags: [`like-status-${tweeId}`],
+    tags: [`like-status-${tweetId}`],
   });
-  return cachedOperation(tweeId, userId!);
+  return cachedOperation(tweetId, userId!, session);
 }
 
-async function getLikeStatus(tweetId: number, userId: number) {
+async function getLikeStatus(
+  tweetId: number,
+  userId: number,
+  session: { id: number; username: string }
+) {
   // const session = await getSession();
   const isLiked = await db.like.findUnique({
     where: {
@@ -75,6 +79,7 @@ async function getLikeStatus(tweetId: number, userId: number) {
   return {
     likeCount,
     isLiked: Boolean(isLiked),
+    session,
   };
 }
 
@@ -90,15 +95,15 @@ async function TweetDetail({ params }: { params: { id: string } }) {
   if (!tweet) {
     return notFound();
   }
-  const { likeCount, isLiked } = await getCachedLikeStatus(id);
+  const { likeCount, isLiked, session } = await getCachedLikeStatus(id);
   return (
     <div className="min-h-screen p-24">
       <div className="flex flex-col justify-center items-center gap-5">
         <span className="flex justify-center">
           {tweet?.id}. {tweet?.tweet}
         </span>
-        <LikeButton isLiked={isLiked} likeCount={likeCount} tweeId={id} />
-        <CommentInput tweeId={id} comments={comments} />
+        <LikeButton isLiked={isLiked} likeCount={likeCount} tweetId={id} />
+        <CommentInput tweetId={id} comments={comments} session={session} />
       </div>
     </div>
   );

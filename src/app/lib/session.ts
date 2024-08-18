@@ -2,7 +2,8 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 
 interface SessionContent {
-  id?: number;
+  id: number;
+  username: string;
 }
 
 export default function getSession() {
